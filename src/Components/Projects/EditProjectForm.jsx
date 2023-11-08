@@ -1,14 +1,23 @@
+import { Input, message } from 'antd'
 import React, { useState } from 'react'
-import { projectService } from '../../services/projectService';
-import { useNavigate } from 'react-router';
-import { Input, message } from 'antd';
-import SelectCategory from '../LstCategory/SelectCategory';
+import { useDispatch, useSelector } from 'react-redux'
+import SelectCategory from '../LstCategory/SelectCategory'
+import { projectService } from '../../services/projectService'
+import { setProjectDetail } from '../../Redux-toolkit/reducer/ProjectSlice'
 
-const CreateProjectForm = () => {
-  const navigate = useNavigate();
-  const [projectName, setProjectName] = useState('');
-  const [description, setDescription] = useState('');
-  const [categoryId, setCategoryId] = useState(0);
+const EditProjectForm = () => {
+  const projectDetail = useSelector(state => state.project.projectDetail)
+  console.log(projectDetail)
+  const dispatch = useDispatch()
+
+  const [id, setId] = useState(projectDetail?.id);
+  const [projectName, setProjectName] = useState(projectDetail?.projectName);
+  const [categoryId, setCategoryId] = useState(projectDetail?.categoryId);
+  const [description, setDescription] = useState(projectDetail?.description);
+
+  const handleSetCategoryId = (number) => {
+    setCategoryId(number)
+  }
 
   const [messageApi, contextHolder] = message.useMessage();
   const successMessage = (content) => {
@@ -24,36 +33,48 @@ const CreateProjectForm = () => {
     });
   };
 
-  const handleSetCategoryId = (number) => {
-    setCategoryId(number)
-  }
-
   const init = {
+    id: id,
     projectName: projectName,
-    description: description,
     categoryId: categoryId,
+    description: description
   }
 
   return (
-    <div>
+    <div
+      className='w-full grid grid-cols-1 lg:grid-cols-3 gap-4'
+    >
       {contextHolder}
-      <div
-        className='mb-4'
-      >
+      <div>
+        <label htmlFor="id" className="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Project ID:</label>
+        <Input
+          id="id"
+          type="text"
+          className='w-full bg-gray-100'
+          readOnly
+          defaultValue={id}
+          size='large'
+        />
+      </div>
+      <div>
         <label htmlFor="projectName" className="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Project name:</label>
         <Input
           id="projectName"
-          className='w-full text-base'
-          placeholder='Project name'
+          type="text"
+          className='w-full'
+          defaultValue={projectName}
           size='large'
-          onChange={(e) => {
-            setProjectName(e.target.value)
-          }}
+          onChange={(e) => setProjectName(e.target.value)}
         />
       </div>
-      <div
-        className='mb-4'
-      >
+      <div>
+        <label htmlFor="categoryId" className="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Project name:</label>
+        <SelectCategory
+          defaultValue={categoryId}
+          handleSetCategoryId={handleSetCategoryId}
+        />
+      </div>
+      <div className='col-span-3'>
         <label htmlFor="description" className="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Description:</label>
         <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
           <div className="flex items-center justify-between px-3 py-2 border-b dark:border-gray-600">
@@ -138,6 +159,7 @@ const CreateProjectForm = () => {
               id="description"
               rows="8"
               className="focus:outline-none block w-full px-0 text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400 start resize-none"
+              defaultValue={description}
               onChange={(e) => {
                 setDescription(e.target.value)
               }}
@@ -146,27 +168,18 @@ const CreateProjectForm = () => {
           </div>
         </div>
       </div>
-
-      <div
-        className='mb-4'
-      >
-        <label htmlFor="categoryId" className="block mb-2 text-sm font-bold text-gray-900 dark:text-white">Project Category</label>
-        <SelectCategory
-          handleSetCategoryId={handleSetCategoryId}
-        />
-      </div>
-
       <div className="flex justify-start items-center">
         <button
           type='submit'
           className='border-2 border-blue-500  text-blue-500 font-bold py-2 px-4 rounded'
           onClick={() => {
-            projectService.createProject(init)
+            projectService.updateProject(id, init)
               .then(res => {
                 successMessage(res.data.message)
-                navigate('/')
+                dispatch(setProjectDetail(null))
               })
               .catch(err => {
+                console.log(err)
                 errorMessage(err.response.data.content)
               })
           }}
@@ -178,4 +191,4 @@ const CreateProjectForm = () => {
   )
 }
 
-export default CreateProjectForm
+export default EditProjectForm

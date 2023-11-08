@@ -56,7 +56,7 @@ const HomePage = () => {
         />
       </div>
       <div
-        className={`w-full h-[calc(100vh-4rem)] border-t-2 border-black p-2 fixed top-16 transition-all bg-[#f5f5f5]
+        className={`w-full h-[calc(100vh-4rem)] border-t-2 border-black p-2 fixed top-16 transition-all bg-[#f5f5f5] lg:z-20
         ${isShowMenu === true ? 'lg:w-[calc(100%-18rem)] lg:left-72' : 'lg:w-full lg:left-0'} lg:border-t-0 overflow-y-auto`}
       >
         <div

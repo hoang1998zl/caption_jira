@@ -10,7 +10,7 @@ export const ProjectSlice = createSlice({
   reducers: {
     setProjectDetail: (state, action) => {
       state.projectDetail = action.payload
-    }
+    },
   }
 });
 

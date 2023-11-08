@@ -2,7 +2,7 @@ import { Select } from 'antd'
 import React, { useLayoutEffect, useState } from 'react'
 import { projectService } from '../../services/projectService'
 
-const SelectCategory = ({ handleSetCategoryId }) => {
+const SelectCategory = ({ handleSetCategoryId, defaultValue }) => {
   let options = [];
   const [lstCategory, setLstCategory] = useState([])
 
@@ -47,6 +47,7 @@ const SelectCategory = ({ handleSetCategoryId }) => {
         onChange={(e) => {
           handleSetCategoryId(e)
         }}
+        defaultValue={defaultValue}
       />
     </div>
   )
