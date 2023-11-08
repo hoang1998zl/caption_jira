@@ -1,0 +1,39 @@
+#SideBar {
+  @media (max-width: 768px) {
+    #menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid;
+      border-radius: 0.25rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+      z-index: 5;
+      transition: all 0.3s;
+      display: none;
+
+      &.show {
+        display: block;
+      }
+    }
+  }
+  @media (min-width: 768px) {
+    #menu {
+      display: block;
+    }
+  }
+
+  ul {
+    li {
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      cursor: pointer;
+
+      &.active {
+        background-color: rgb(29 78 216 / 1);
+        color: #fff;
+      }
+    }
+  }
+}

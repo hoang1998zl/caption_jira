@@ -1,24 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import { useSelector } from "react-redux";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import LoginPage from "./Templates/Login/LoginPage";
+import HomePage from "./Templates/HomePage";
+import HOC from "./HOC/HOC";
+import Page404 from "./Pages/Page404/Page404";
 
 function App() {
+  const { isAuthenticated } = useSelector(state => state.user)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/">
+          {
+            isAuthenticated === false
+              ?
+              <>
+                <Route path="/" element={<LoginPage />} />
+                <Route path="*" element={<LoginPage />} />
+              </>
+              :
+              <>
+                <Route path="/" element={<HOC Component={HomePage} />} />
+                <Route path="*" element={<Page404 />} />
+              </>
+          }
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

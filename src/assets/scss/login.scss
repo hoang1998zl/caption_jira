@@ -1,0 +1,30 @@
+#LoginPage {
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 2rem;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    transition: transform 1s;
+    transform-style: preserve-3d;
+    perspective: 500px;
+
+    .signin,
+    .signup {
+      position: absolute;
+      backface-visibility: hidden;
+    }
+
+    .signup {
+      transform: rotateY(180deg);
+    }
+
+    &.active {
+      transform: rotateY(180deg);
+      transition: transform 0.5s;
+    }
+  }
+}
