@@ -1,10 +1,12 @@
 import React, { useLayoutEffect, useState } from 'react'
 import { projectService } from '../../services/projectService'
 import { Space, Table, Tooltip, message } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { setLoading } from '../../Redux-toolkit/reducer/UserSlice'
-import { setProjectDetail } from '../../Redux-toolkit/reducer/ProjectSlice'
+import { setProjectDetail, setTaskDetail } from '../../Redux-toolkit/reducer/ProjectSlice'
 import ProjectDetail from '../../Pages/Projects/ProjectDetail'
+import LstTaskPage from '../../Pages/Tasks/LstTaskPage'
+import TaskDetail from '../../Pages/Tasks/TaskDetail'
 
 const ProjectManagementTable = () => {
 
@@ -12,6 +14,8 @@ const ProjectManagementTable = () => {
   const [lstProject, setLstProject] = useState([])
 
   const [showProjectDetail, setShowProjectDetail] = useState(false)
+  const [showLstTask, setShowLstTask] = useState(false)
+  const [showTaskDetail, setShowTaskDetail] = useState(false)
 
   const [messageApi, contextHolder] = message.useMessage();
   const successMessage = (content) => {
@@ -27,7 +31,7 @@ const ProjectManagementTable = () => {
     });
   };
 
-  useLayoutEffect(() => {
+  const getAllProject = async () => {
     projectService.getAllProject()
       .then(res => {
         setLstProject(res.data.content)
@@ -37,6 +41,10 @@ const ProjectManagementTable = () => {
       .catch(err => {
         errorMessage(err.message)
       })
+  }
+
+  useLayoutEffect(() => {
+    getAllProject();
   }, [])
 
   const columns = [
@@ -62,6 +70,8 @@ const ProjectManagementTable = () => {
           <p
             className='text-sky-400 font-semibold cursor-pointer'
             onClick={() => {
+              dispatch(setProjectDetail(record));
+              handleShowLstTask(true)
             }}
           >
             {text}
@@ -155,7 +165,9 @@ const ProjectManagementTable = () => {
               onClick={() => {
                 projectService.deleteProject(record.id)
                   .then((res) => {
-                    console.log(res.data.message)
+                    dispatch(setLoading(true))
+                    getAllProject()
+                    successMessage(res.data.message)
                   })
                   .catch((err) => {
                     errorMessage(err.response.data.content)
@@ -169,6 +181,18 @@ const ProjectManagementTable = () => {
       }
     }
   ]
+
+  const handleShowProjectDetail = (boolean) => {
+    setShowProjectDetail(boolean)
+  }
+
+  const handleShowLstTask = (boolean) => {
+    setShowLstTask(boolean)
+  }
+
+  const handleShowTaskDetail = (boolean) => {
+    setShowTaskDetail(boolean)
+  }
 
   return (
     <div>
@@ -191,10 +215,50 @@ const ProjectManagementTable = () => {
           <div
             className='w-full h-full bg-black opacity-50 z-0 absolute top-0 left-0 right-0 bottom-0'
             onClick={() => {
-              setShowProjectDetail(false)
+              handleShowProjectDetail(false)
             }}
           ></div>
-          <ProjectDetail />
+          <ProjectDetail
+            getAllProject={getAllProject}
+            handleShowProjectDetail={handleShowProjectDetail}
+          />
+        </div>
+      }
+
+      {
+        showLstTask &&
+        <div
+          className='w-screen h-screen fixed top-0 left-0 z-30 flex justify-center items-center'
+        >
+          <div
+            className='w-full h-full bg-black opacity-50 z-0 absolute top-0 left-0 right-0 bottom-0'
+            onClick={() => {
+              dispatch(setProjectDetail(null))
+              handleShowLstTask(false)
+            }}
+          ></div>
+          <LstTaskPage
+            handleShowLstTask={handleShowLstTask}
+            handleShowTaskDetail={handleShowTaskDetail}
+          />
+        </div>
+      }
+      {
+        showTaskDetail &&
+        <div
+          className='w-screen h-screen fixed top-0 left-0 z-30 flex justify-center items-center'
+        >
+          <div
+            className='w-full h-full bg-black opacity-50 z-0 absolute top-0 left-0 right-0 bottom-0'
+            onClick={() => {
+              dispatch(setTaskDetail(null))
+              handleShowTaskDetail(false)
+            }}
+          ></div>
+          <TaskDetail
+            handleShowLstTask={handleShowLstTask}
+            handleShowTaskDetail={handleShowTaskDetail}
+          />
         </div>
       }
     </div>

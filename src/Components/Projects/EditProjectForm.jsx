@@ -4,10 +4,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import SelectCategory from '../LstCategory/SelectCategory'
 import { projectService } from '../../services/projectService'
 import { setProjectDetail } from '../../Redux-toolkit/reducer/ProjectSlice'
+import { setLoading } from '../../Redux-toolkit/reducer/UserSlice'
 
-const EditProjectForm = () => {
+const EditProjectForm = ({
+  getAllProject,
+  handleShowProjectDetail
+}) => {
   const projectDetail = useSelector(state => state.project.projectDetail)
-  console.log(projectDetail)
   const dispatch = useDispatch()
 
   const [id, setId] = useState(projectDetail?.id);
@@ -168,23 +171,35 @@ const EditProjectForm = () => {
           </div>
         </div>
       </div>
-      <div className="flex justify-start items-center">
+      <div className="lg:col-span-3 flex justify-end items-center gap-4">
         <button
-          type='submit'
-          className='border-2 border-blue-500  text-blue-500 font-bold py-2 px-4 rounded'
+          type='button'
+          className='border-2 border-gray-300  text-gray-300 font-bold py-2 px-4 rounded hover:bg-gray-500 hover:text-white'
+          onClick={() => {
+            dispatch(setProjectDetail(null))
+            handleShowProjectDetail(false)
+          }}
+        >
+          Cancel
+        </button>
+        <button
+          type='button'
+          className='border-2 border-blue-500  text-blue-500 font-bold py-2 px-4 rounded hover:bg-blue-500 hover:text-white'
           onClick={() => {
             projectService.updateProject(id, init)
               .then(res => {
                 successMessage(res.data.message)
                 dispatch(setProjectDetail(null))
+                dispatch(setLoading(true))
+                handleShowProjectDetail(false)
+                getAllProject()
               })
               .catch(err => {
-                console.log(err)
                 errorMessage(err.response.data.content)
               })
           }}
         >
-          Create project
+          Update
         </button>
       </div>
     </div>

@@ -8,7 +8,7 @@ export const taskService = {
     return https.get("/api/TaskType/getAll");
   },
   updateTask: (id, data) => {
-    return
+    return https.post(`/api/Project/updateTask`, data);
   },
   getStatus: () => {
     return https.get("/api/Status/getAll");

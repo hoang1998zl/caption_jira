@@ -1,7 +1,10 @@
 import React from 'react'
 import EditProjectForm from '../../Components/Projects/EditProjectForm'
 
-const ProjectDetail = () => {
+const ProjectDetail = ({
+  getAllProject,
+  handleShowProjectDetail
+}) => {
   return (
     <div
       className='w-11/12 max-h-[75vh] bg-white rounded-xl z-10 p-4 
@@ -12,7 +15,10 @@ const ProjectDetail = () => {
       >
         Edit Project
       </h1>
-      <EditProjectForm />
+      <EditProjectForm
+        getAllProject={getAllProject}
+        handleShowProjectDetail={handleShowProjectDetail}
+      />
     </div>
   )
 }

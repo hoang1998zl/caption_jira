@@ -1,7 +1,7 @@
 import { https } from "./configURL";
 
 export const projectService = {
-  getAllProject: () => {
+  getAllProject: (da) => {
     return https.get("/api/Project/getAllProject");
   },
   getProjectByID: (id) => {
