@@ -3,6 +3,7 @@ import { authService } from '../../services/authService'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router'
 import { loginSuccess } from '../../Redux-toolkit/reducer/UserSlice'
+import { message } from 'antd'
 
 const SignupForm = ({
   setChooseForm
@@ -21,21 +22,30 @@ const SignupForm = ({
       passWord: password
     })
       .then(res => {
-        console.log(res)
-        dispatch(loginSuccess(res.data.content.accessToken,'token'))
+        dispatch(loginSuccess(res.data.content.accessToken, 'token'))
         setChooseForm(false)
         navigate('/')
       })
       .catch(err => {
-        console.log(err)
+        errorMessage(err.response.data.message)
       })
   }
+
+  const [messageApi, contextHolder] = message.useMessage();
+  const errorMessage = (content) => {
+    messageApi.open({
+      type: 'error',
+      content: content,
+    });
+  };
+
 
   return (
     <form
       className='w-full max-w-sm'
       onSubmit={handleSignUp}
     >
+      {contextHolder}
       <h1
         className='text-center text-4xl font-bold text-sky-400 uppercase my-6'
       >

@@ -1,7 +1,7 @@
 import { Table } from 'antd'
 import React from 'react'
 import { projectService } from '../../../services/projectService'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setLoading } from '../../../Redux-toolkit/reducer/UserSlice'
 
 const LstProjectUser = ({
@@ -9,11 +9,12 @@ const LstProjectUser = ({
   projectId,
   getAllProject
 }) => {
-  
+
   const dispatch = useDispatch()
+  const { token } = useSelector(state => state.user)
 
   const handleDeleteUser = (projectId, userId) => {
-    projectService.removeUserFromProject(projectId, userId)
+    projectService.removeUserFromProject(token, projectId, userId)
       .then(res => {
         dispatch(setLoading(true))
         getAllProject()
@@ -28,14 +29,14 @@ const LstProjectUser = ({
       key: 'userId',
       title: 'UserID',
       dataIndex: 'userId',
-      width: 80,
+      width: 60,
       align: 'center'
     },
     {
       key: 'avatar',
       title: 'Avatar',
       dataIndex: 'avatar',
-      width: 80,
+      width: 60,
       render: (avatar) => {
         return (
           <img
@@ -50,7 +51,16 @@ const LstProjectUser = ({
       key: 'name',
       title: 'Name',
       dataIndex: 'name',
-      width: 120
+      width: 80,
+      render: (text) => {
+        return (
+          <p
+            className='line-clamp-1'
+          >
+            {text}
+          </p>
+        )
+      }
     },
     {
       key: 'action',
@@ -58,7 +68,7 @@ const LstProjectUser = ({
         return (
           <button
             type="button"
-            className='w-8 h-8 flex justify-center items-center rounded-full bg-red-700 text-white'
+            className='w-7 h-7 flex justify-center items-center rounded-full bg-red-700 text-white'
             onClick={() => {
               handleDeleteUser(projectId, record.userId)
             }}

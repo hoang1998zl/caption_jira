@@ -2,13 +2,14 @@ import { Input, Popover, Table, message } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { userService } from '../../services/userService'
-import { setSelectedUser } from '../../Redux-toolkit/reducer/UserSlice'
+import { setLstUser, setSelectedUser } from '../../Redux-toolkit/reducer/UserSlice'
 import EditUser from '../../Pages/Users/EditUser'
 
-const UsersTable = () => {
+const UsersTable = ({
+  lstUser
+}) => {
 
-  const { token } = useSelector(state => state.user)
-  const [lstUser, setLstUser] = useState([])
+  const { token, lst_user } = useSelector(state => state.user)
   const dispatch = useDispatch()
   const [openModal, setOpenModal] = useState(false)
   const InputRef = useRef(null)
@@ -19,12 +20,23 @@ const UsersTable = () => {
   useEffect(() => {
     userService.getUser(token, '')
       .then(res => {
-        setLstUser(res.data.content)
+        dispatch(setLstUser(res.data.content))
       })
       .catch(err => {
-        errorMessage(err.message)
+        errorMessage(err.response.data.content)
       })
-  }, [])
+  }, [lst_user])
+  
+  const getUser = (name) => {
+    userService.getUser(token, name)
+      .then(res => {
+        dispatch(setLstUser(res.data.content))
+        successMessage(res.data.message)
+      })
+      .catch(err => {
+        errorMessage(err.response.data.content)
+      })
+  }
 
   const [messageApi, contextHolder] = message.useMessage();
   const successMessage = (content) => {
@@ -40,24 +52,12 @@ const UsersTable = () => {
     });
   };
 
-  const getUser = (name) => {
-    userService.getUser(token, name)
-      .then(res => {
-        setLstUser(res.data.content)
-        successMessage(res.data.message)
-      })
-      .catch(err => {
-        errorMessage(err.message)
-      })
-  }
-
   const deleteUser = (id) => {
     userService.deleteUser(token, id)
       .then(res => {
         successMessage(res.data.message)
       })
       .catch(err => {
-        console.error(err);
         errorMessage(err.response.data.content)
       })
   }
@@ -105,7 +105,7 @@ const UsersTable = () => {
           <div className='flex items-center gap-x-4'>
             <button
               type="button"
-              className='px-4 py-1 flex justify-center items-center rounded bg-green-700 text-white'
+              className='px-4 py-1 flex justify-center items-center rounded bg-blue-700 text-white'
               onClick={() => {
                 handleOpenModal(true);
                 dispatch(setSelectedUser(record));
@@ -116,7 +116,10 @@ const UsersTable = () => {
             <button
               type="button"
               className='px-4 py-1 flex justify-center items-center rounded bg-red-700 text-white'
-              onClick={() => deleteUser(record.userId)}
+              onClick={() => {
+                deleteUser(record.userId)
+                getUser('')
+              }}
             >
               Delete
             </button>
@@ -149,7 +152,7 @@ const UsersTable = () => {
 
       <Table
         columns={columns}
-        dataSource={lstUser}
+        dataSource={lst_user}
         scroll={{
           x: 'max-content',
           y: '60vh'

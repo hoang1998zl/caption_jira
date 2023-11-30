@@ -2,7 +2,7 @@ import { Select, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { userService } from '../../../services/userService';
 import { projectService } from '../../../services/projectService';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setLoading } from '../../../Redux-toolkit/reducer/UserSlice';
 
 const AddProjectUser = ({
@@ -10,12 +10,13 @@ const AddProjectUser = ({
   getAllProject
 }) => {
   const dispatch = useDispatch()
+  const { token } = useSelector(state => state.user)
 
   let options = [];
 
   const [lstUser, setLstUser] = useState([])
   const getLstUser = () => {
-    userService.getAllUser()
+    userService.getAllUser(token)
       .then(res => {
         setLstUser(res.data.content)
       })
@@ -43,14 +44,14 @@ const AddProjectUser = ({
   }, [])
 
   const handleChangeUser = (e) => {
-    projectService.assignUserProject(projectId, e.value)
+    projectService.assignUserProject(token, projectId, e.value)
       .then(res => {
-        successMessage(res.data.content)
+        successMessage(res.data.message)
         dispatch(setLoading(true))
         getAllProject()
       })
       .catch(err => {
-        errorMessage(err.data.message)
+        errorMessage(err.response.data.message)
       })
   }
 

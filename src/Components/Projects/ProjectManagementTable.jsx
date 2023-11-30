@@ -117,6 +117,7 @@ const ProjectManagementTable = () => {
                     key={index}
                     title={<LstProjectUser members={record.members} projectId={record.id} getAllProject={getAllProject} />}
                     color='#fff'
+                    trigger={['hover', 'click']}
                     placement='bottomRight'
                     overlayInnerStyle={{
                       width: 'max-content'
