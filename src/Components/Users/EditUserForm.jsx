@@ -45,7 +45,7 @@ const EditUserForm = ({
 
   return (
     <form
-      className='w-full py-2'
+      className='w-full py-2 max-h-[50vh] overflow-y-auto'
       onSubmit={(e) => {
         onSubmit(e)
       }}
