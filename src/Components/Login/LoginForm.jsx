@@ -3,6 +3,7 @@ import { authService } from '../../services/authService'
 import { useDispatch } from 'react-redux'
 import { loginSuccess } from '../../Redux-toolkit/reducer/UserSlice'
 import { useNavigate } from 'react-router'
+import { sessionService } from '../../services/sessionServices'
 
 const LoginForm = ({
   setChooseForm
@@ -21,6 +22,7 @@ const LoginForm = ({
       passWord: password
     })
       .then(res => {
+        sessionService.setItem(res.data.content.accessToken, 'token')
         dispatch(loginSuccess(res.data.content,'user'))
         setChooseForm(false)
         navigate('/')

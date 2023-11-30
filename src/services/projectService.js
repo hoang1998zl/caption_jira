@@ -1,31 +1,66 @@
 import { https } from "./configURL";
 
 export const projectService = {
-  getAllProject: (da) => {
-    return https.get("/api/Project/getAllProject");
+  getAllProject: (token) => {
+    return https.get("/api/Project/getAllProject", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   },
-  getProjectByID: (id) => {
-    return https.get(`/api/Project/getProjectDetail?id=${id}`);
+  getProjectByID: (token, id) => {
+    return https.get(`/api/Project/getProjectDetail?id=${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   },
-  createProject: (data) => {
-    return https.post("/api/Project/createProjectAuthorize", data)
+  createProject: (token, data) => {
+    return https.post("/api/Project/createProjectAuthorize", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
   },
-  getProjectCategory: () => {
-    return https.get("/api/ProjectCategory");
+  getProjectCategory: (token) => {
+    return https.get("/api/ProjectCategory", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   },
-  updateProject: (id, data) => {
-    return https.put(`/api/Project/updateProject?projectId=${id}`, data);
+  updateProject: (token, id, data) => {
+    return https.put(`/api/Project/updateProject?projectId=${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   },
-  deleteProject: (id) => {
-    return https.delete(`/api/Project/deleteProject?projectId=${id}`);
+  deleteProject: (token, id) => {
+    return https.delete(`/api/Project/deleteProject?projectId=${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   },
-  assignUserProject: (projectId, userId) => {
+  assignUserProject: (token, projectId, userId) => {
     return https.post("/api/Project/assignUserProject", {
       projectId: Number(projectId),
       userId: Number(userId)
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
   },
-  removeUserFromProject: (data) => {
-    return https.post("/api/Project/removeUserFromProject", data);
+  removeUserFromProject: (token, projectId, userId) => {
+    return https.post("/api/Project/removeUserFromProject", {
+      projectId: Number(projectId),
+      userId: Number(userId)
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   },
 }

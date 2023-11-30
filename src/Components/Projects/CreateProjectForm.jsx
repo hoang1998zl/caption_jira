@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { projectService } from '../../services/projectService';
-import { useNavigate } from 'react-router';
 import { Input, message } from 'antd';
 import SelectCategory from '../LstCategory/SelectCategory';
+import { useDispatch } from 'react-redux';
+import { setCurrentPage } from '../../Redux-toolkit/reducer/CurrentPage';
 
 const CreateProjectForm = () => {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [projectName, setProjectName] = useState('');
   const [description, setDescription] = useState('');
   const [categoryId, setCategoryId] = useState(0);
@@ -164,7 +165,7 @@ const CreateProjectForm = () => {
             projectService.createProject(init)
               .then(res => {
                 successMessage(res.data.message)
-                navigate('/')
+                dispatch(setCurrentPage(1))
               })
               .catch(err => {
                 errorMessage(err.response.data.content)

@@ -1,17 +1,20 @@
 import React, { useLayoutEffect, useState } from 'react'
 import { taskService } from '../../services/taskService';
 import { Select } from 'antd';
+import { useSelector } from 'react-redux';
 
 const SelectTaskType = ({
   defaultValue,
   handleSetTypeId
 }) => {
+
+  const { token } = useSelector(state => state.user)
   let options = [];
 
   const [lstTaskType, setLstTaskType] = useState([])
 
   const getTaskType = async () => {
-    taskService.getTaskType()
+    taskService.getTaskType(token)
       .then(res => {
         setLstTaskType(res.data.content)
       })
@@ -43,7 +46,7 @@ const SelectTaskType = ({
         id="typeId"
         allowClear
         name="typeId"
-        className='w-full'
+        className='w-full min-w-[10rem]'
         placeholder="Select a task type"
         size='large'
         options={options}

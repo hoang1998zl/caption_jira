@@ -1,16 +1,14 @@
 import axios from "axios";
-import { sessionService } from "./sessionServices";
 
 const BASE_URL = 'https://jiranew.cybersoft.edu.vn';
 
-const TokenCybersoft = 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJzdHJpbmciLCJuYmYiOjE2MjcyOTAzODYsImV4cCI6MTYyNzI5Mzk4Nn0.75DGRowsyI7Sl6bmYgKuZ8oaG36fOr0TUWbUwAjtDs';
-
-let token = sessionService.getItem('token');
+const TokenCybersoft = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZW5Mb3AiOiJCb290Y2FtcCA0OSIsIkhldEhhblN0cmluZyI6IjI3LzAzLzIwMjQiLCJIZXRIYW5UaW1lIjoiMTcxMTQ5NzYwMDAwMCIsIm5iZiI6MTY4MjYxNDgwMCwiZXhwIjoxNzExNjQ1MjAwfQ.4mCm0hbeazS7xy_3vtlKRk0Embky8sHJG22LuQj7FLc';
 
 const configHeaderAxios = () => {
+  // let token = sessionService.getItem('token');
   return {
     TokenCybersoft,
-    Authorization: 'Bearer ' + token,
+    // Authorization: `Bearer ${token}`,
   };
 };
 

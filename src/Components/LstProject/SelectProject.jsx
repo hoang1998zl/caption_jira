@@ -1,30 +1,18 @@
 import { Select } from 'antd';
-import React, { useMemo, useState } from 'react'
-import { projectService } from '../../services/projectService';
+import React from 'react'
+import { useSelector } from 'react-redux';
 
 const SelectProject = ({
+  handleSetProjectId
 }) => {
+
+  const { lst_project } = useSelector(state => state.project)
+
   let options = [];
-
-  const [lstProject, setLstProject] = useState([])
-
-  const getProject = async () => {
-    projectService.getAllProject()
-      .then(res => {
-        setLstProject(res.data.content)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }
-
-  useMemo(() => {
-    getProject()
-  }, [])
 
   const renderLstProject = () => {
     const array = []
-    lstProject?.map((item) => {
+    lst_project?.map((item) => {
       const type = {
         value: item.id,
         label: item.projectName
@@ -38,22 +26,18 @@ const SelectProject = ({
     <div>
       {renderLstProject()}
       <Select
-        id="typeId"
+        id="projectId"
         allowClear
         showSearch
-        name="typeId"
+        name="projectId"
         className='w-full'
-        placeholder="Select a task type"
+        placeholder="Select Project"
         size='large'
         options={options}
         optionFilterProp="children"
         filterOption={(input, option) => (option?.label ?? '').includes(input)}
-        //  -- sắp xếp options theo Number -> ABC --
-        // filterSort={(optionA, optionB) =>
-        //   (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-        // }
-        onChange={(e)=>{
-           console.log(e)
+        onChange={(e) => {
+          handleSetProjectId(e)
         }}
       />
     </div>

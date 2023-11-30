@@ -12,6 +12,8 @@ const LstTask = ({
   const projectDetail = useSelector(state => state.project.projectDetail)
   const dispatch = useDispatch()
 
+  const token = useSelector(state => state.user.token)
+
   const [lstTask, setLstTask] = useState([])
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -29,13 +31,12 @@ const LstTask = ({
   };
 
   const getLstTask = (projectID) => {
-    projectService.getProjectByID(projectID)
+    projectService.getProjectByID(token, projectID)
       .then(res => {
-        console.log(res.data.content.lstTask)
         setLstTask(res.data.content.lstTask)
-        successMessage(res.data.message)
       })
       .catch(err => {
+        console.log(err)
         errorMessage(err.message)
       })
   }
@@ -45,9 +46,8 @@ const LstTask = ({
   }, [])
 
   const getTaskDetail = (taskID) => {
-    taskService.getTaskByID(taskID)
+    taskService.getTaskByID(token, taskID)
       .then(res => {
-        successMessage(res.data.message)
         dispatch(setTaskDetail(res.data.content))
         handleShowLstTask(false)
         handleShowTaskDetail(true)
@@ -65,20 +65,20 @@ const LstTask = ({
           className='border border-gray-300 rounded-lg py-4 px-1 bg-[#f4f5f7] shadow flex flex-col justify-between'
         >
           <h1
-            className='font-semibold text-base px-3'
+            className='font-bold text-base px-3 line-clamp-1'
           >
             {item.statusName}
           </h1>
-          <div className='w-full mt-4 bg-white rounded'>
+          <div className=''>
             {
               item.lstTaskDeTail.map((taskDetail, index) => {
                 return (
                   <div
                     key={index}
-                    className='p-3'
+                    className='p-3 w-full mt-2 bg-white rounded'
                   >
                     <h4
-                      className='text-gray-700 capitalize mb-4 hover:text-blue-500 cursor-pointer'
+                      className='text-gray-700 capitalize mb-4 hover:text-blue-500 cursor-pointer font-semibold'
                       onClick={() => {
                         getTaskDetail(taskDetail.taskId)
                       }}
@@ -90,7 +90,7 @@ const LstTask = ({
                       className='flex justify-between items-center gap-4'
                     >
                       <p
-                        className='text-red-500 font-sm flex-1 w-max'
+                        className='text-red-500 font-sm flex-1 w-max italic text-sm'
                       >
                         {taskDetail.priorityTask.priority}
                       </p>

@@ -6,12 +6,14 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import UserSlice from './Redux-toolkit/reducer/UserSlice';
 import ProjectSlice from './Redux-toolkit/reducer/ProjectSlice';
+import CurrentPage from './Redux-toolkit/reducer/CurrentPage';
 
 
 export const store = configureStore({
   reducer: {
     user: UserSlice,
     project: ProjectSlice,
+    currentPage: CurrentPage,
   },
 })
 

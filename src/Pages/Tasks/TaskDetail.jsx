@@ -14,7 +14,7 @@ const TaskDetail = () => {
       </h1>
 
       <div
-        className='w-full my-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'
+        className='w-full my-8 flex gap-10'
       >
         <EditTaskForm />
       </div>

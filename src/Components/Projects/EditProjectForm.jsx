@@ -10,6 +10,7 @@ const EditProjectForm = ({
   getAllProject,
   handleShowProjectDetail
 }) => {
+  const token = useSelector(state => state.user.token)
   const projectDetail = useSelector(state => state.project.projectDetail)
   const dispatch = useDispatch()
 
@@ -186,7 +187,7 @@ const EditProjectForm = ({
           type='button'
           className='border-2 border-blue-500  text-blue-500 font-bold py-2 px-4 rounded hover:bg-blue-500 hover:text-white'
           onClick={() => {
-            projectService.updateProject(id, init)
+            projectService.updateProject(token, id, init)
               .then(res => {
                 successMessage(res.data.message)
                 dispatch(setProjectDetail(null))

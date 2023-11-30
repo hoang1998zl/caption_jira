@@ -17,11 +17,6 @@ const Avatar = () => {
     >
       <button
         className='w-full px-2 py-1.5 text-left hover:bg-blue-500 hover:text-white rounded'
-      >
-        Thông tin tài khoản
-      </button>
-      <button
-        className='w-full px-2 py-1.5 text-left hover:bg-blue-500 hover:text-white rounded'
         onClick={handleLogout}
       >
         Đăng xuất

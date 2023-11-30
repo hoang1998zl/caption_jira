@@ -7,8 +7,12 @@ import { setProjectDetail, setTaskDetail } from '../../Redux-toolkit/reducer/Pro
 import ProjectDetail from '../../Pages/Projects/ProjectDetail'
 import LstTaskPage from '../../Pages/Tasks/LstTaskPage'
 import TaskDetail from '../../Pages/Tasks/TaskDetail'
+import { sessionService } from '../../services/sessionServices'
+import AddProjectUser from './Project_User/AddProjectUser'
+import LstProjectUser from './Project_User/LstProjectUser'
 
 const ProjectManagementTable = () => {
+  const token = sessionService.getItem('token')
 
   const dispatch = useDispatch()
   const [lstProject, setLstProject] = useState([])
@@ -32,7 +36,7 @@ const ProjectManagementTable = () => {
   };
 
   const getAllProject = async () => {
-    projectService.getAllProject()
+    projectService.getAllProject(token)
       .then(res => {
         setLstProject(res.data.content)
         successMessage(res.data.message)
@@ -44,6 +48,7 @@ const ProjectManagementTable = () => {
   }
 
   useLayoutEffect(() => {
+    dispatch(setLoading(true))
     getAllProject();
   }, [])
 
@@ -110,7 +115,7 @@ const ProjectManagementTable = () => {
                 return (
                   <Tooltip
                     key={index}
-                    title={'test'}
+                    title={<LstProjectUser members={record.members} projectId={record.id} getAllProject={getAllProject} />}
                     color='#fff'
                     placement='bottomRight'
                     overlayInnerStyle={{
@@ -128,8 +133,9 @@ const ProjectManagementTable = () => {
             }
 
             <Tooltip
-              title={''}
+              title={<AddProjectUser projectId={record.id} getAllProject={getAllProject} />}
               color='#fff'
+              trigger={['hover', 'click']}
               placement='bottomRight'
               overlayInnerStyle={{
                 width: 'max-content'
@@ -163,7 +169,7 @@ const ProjectManagementTable = () => {
             <button
               className='w-8 h-8 rounded-md text-red-700 border border-red-700 cursor-pointer hover:bg-red-700 hover:text-white'
               onClick={() => {
-                projectService.deleteProject(record.id)
+                projectService.deleteProject(token, record.id)
                   .then((res) => {
                     dispatch(setLoading(true))
                     getAllProject()

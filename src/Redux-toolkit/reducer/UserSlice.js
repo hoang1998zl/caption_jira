@@ -6,6 +6,8 @@ const initialState = {
   user: null,
   token: "",
   loading: true,
+  lst_user: null,
+  selectedUser: null
 }
 
 export const UserSlice = createSlice({
@@ -16,7 +18,6 @@ export const UserSlice = createSlice({
       state.isAuthenticated = true;
       state.user = action.payload;
       state.token = action.payload.accessToken;
-      sessionService.setItem(action.payload.accessToken, 'token');
     },
     logout: (state) => {
       state.isAuthenticated = false;
@@ -26,6 +27,12 @@ export const UserSlice = createSlice({
     },
     setLoading: (state, action) => {
       state.loading = action.payload
+    },
+    setLstUser: (state, action) => {
+      state.lst_user = action.payload
+    },
+    setSelectedUser: (state, action) => {
+      state.selectedUser = action.payload
     }
   }
 });
@@ -33,7 +40,9 @@ export const UserSlice = createSlice({
 export const {
   loginSuccess,
   logout,
-  setLoading
+  setLoading,
+  setLstUser,
+  setSelectedUser
 } = UserSlice.actions
 
 
