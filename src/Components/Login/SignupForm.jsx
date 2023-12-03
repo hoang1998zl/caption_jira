@@ -22,9 +22,7 @@ const SignupForm = ({
       passWord: password
     })
       .then(res => {
-        dispatch(loginSuccess(res.data.content.accessToken, 'token'))
         setChooseForm(false)
-        navigate('/')
       })
       .catch(err => {
         errorMessage(err.response.data.message)

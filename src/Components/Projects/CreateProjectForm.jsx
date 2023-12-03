@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { projectService } from '../../services/projectService';
 import { Input, message } from 'antd';
 import SelectCategory from '../LstCategory/SelectCategory';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentPage } from '../../Redux-toolkit/reducer/CurrentPage';
 
 const CreateProjectForm = () => {
   const dispatch = useDispatch();
+  const { token } = useSelector(state => state.user)
   const [projectName, setProjectName] = useState('');
   const [description, setDescription] = useState('');
   const [categoryId, setCategoryId] = useState(0);
@@ -162,7 +163,7 @@ const CreateProjectForm = () => {
           type='submit'
           className='border-2 border-blue-500  text-blue-500 font-bold py-2 px-4 rounded'
           onClick={() => {
-            projectService.createProject(init)
+            projectService.createProject(token, init)
               .then(res => {
                 successMessage(res.data.message)
                 dispatch(setCurrentPage(1))
