@@ -15,17 +15,17 @@ const LoginPage = () => {
       id='LoginPage'
       className="w-screen h-screen overflow-y-auto bg-sky-400 relative flex justify-center items-center">
       <div
-        className={`content w-full h-[35rem] max-w-md ${chooseForm === true && 'active'}`}
+        className={`content w-full h-[47rem] max-w-md ${chooseForm === true && 'active'}`}
       >
         <div
-          className='signin w-[calc(100%-4rem)]'
+          className='signin w-[calc(100%-4rem)] max-h-full overflow-y-auto'
         >
           <LoginForm
             setChooseForm={setChooseFormm}
           />
         </div>
         <div
-          className='signup w-[calc(100%-4rem)]'
+          className='signup w-[calc(100%-4rem)] max-h-full overflow-y-auto'
         >
           <SignupForm
             setChooseForm={setChooseFormm}
